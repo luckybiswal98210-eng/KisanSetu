@@ -22,7 +22,7 @@ export async function executeNeonQuery(queryText, params = []) {
   }
 
   try {
-    const result = await sql(queryText, params);
+    const result = await sql.query(queryText, params);
     return { success: true, mode: 'live_neon', data: result };
   } catch (error) {
     console.error('❌ Neon Database Query Error:', error);
