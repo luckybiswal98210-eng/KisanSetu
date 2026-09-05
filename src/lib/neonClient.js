@@ -9,11 +9,13 @@ const databaseUrl =
 /**
  * Neon Serverless PostgreSQL Query Function
  * Executes raw parameterized queries directly over HTTP/WebSocket
+ * Uses neon tagged template literal syntax for safe parameterized queries
  */
 export const sql = databaseUrl ? neon(databaseUrl) : null;
 
 /**
  * Robust database query wrapper with fallback to offline mock dataset
+ * Uses the Neon tagged template literal format: sql`SELECT...` or sql(query, params) for parameterized
  */
 export async function executeNeonQuery(queryText, params = []) {
   if (!sql) {
@@ -22,10 +24,12 @@ export async function executeNeonQuery(queryText, params = []) {
   }
 
   try {
-    const result = await sql.query(queryText, params);
+    // Use sql() as a tagged function for parameterized queries
+    // The neon() client supports both tagged templates and function call syntax
+    const result = await sql(queryText, params);
     return { success: true, mode: 'live_neon', data: result };
   } catch (error) {
-    console.error('❌ Neon Database Query Error:', error);
+    console.warn('⚠️ Neon Database Query Warning (using local fallback):', error.message);
     return { success: false, error: error.message, data: null };
   }
 }

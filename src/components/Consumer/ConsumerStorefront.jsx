@@ -28,7 +28,18 @@ export default function ConsumerStorefront({ consumerRequests = INITIAL_CONSUMER
   const [address, setAddress] = useState('Flat 402, Green Meadows Apt, Veera Desai Road, Andheri West, Mumbai - 400053');
   const [specialRequest, setSpecialRequest] = useState('');
   const [requestSubmitted, setRequestSubmitted] = useState(null);
-  const [localRequests, setLocalRequests] = useState(consumerRequests);
+  const [localRequests, setLocalRequests] = useState(Array.isArray(consumerRequests) ? consumerRequests : INITIAL_CONSUMER_REQUESTS);
+
+  // Safe benchmark lookup — GOVERNMENT_BENCHMARK_PRICES is an object, not an array
+  const getBenchmark = (itemName) => {
+    try {
+      const arr = Object.values(GOVERNMENT_BENCHMARK_PRICES || {});
+      return arr.find(b =>
+        itemName.toLowerCase().includes((b.cropName || '').toLowerCase().split(' ')[0]) ||
+        (b.cropName || '').toLowerCase().includes(itemName.toLowerCase().split(' ')[0])
+      ) || null;
+    } catch { return null; }
+  };
 
   const addToCart = (id) => {
     setCart(prev => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
@@ -245,12 +256,9 @@ export default function ConsumerStorefront({ consumerRequests = INITIAL_CONSUMER
           
           {/* Left Column: Product Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            {CONSUMER_CATALOG.map((item) => {
+            {(CONSUMER_CATALOG || []).map((item) => {
               const qty = cart[item.id] || 0;
-              const matchingBenchmark = GOVERNMENT_BENCHMARK_PRICES.find(b => 
-                item.name.toLowerCase().includes(b.crop.toLowerCase()) || 
-                b.crop.toLowerCase().includes(item.name.toLowerCase().split(' ')[0])
-              );
+              const matchingBenchmark = getBenchmark(item.name);
 
               return (
                 <div 

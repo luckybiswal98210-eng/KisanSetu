@@ -22,6 +22,7 @@ import {
   UserPlus
 } from 'lucide-react';
 import { PRESET_ACCOUNTS, MASTER_ADMIN_DATA, I18N_STRINGS, SDG_IMPACT_GOALS } from '../../data/mockData';
+import { registerNewUser, authenticateUser } from '../../lib/authService';
 import confetti from 'canvas-confetti';
 
 export default function HomePage({ onLogin, currentLang, setCurrentLang }) {
@@ -37,6 +38,7 @@ export default function HomePage({ onLogin, currentLang, setCurrentLang }) {
   const [customContact, setCustomContact] = useState('');
   const [customLocation, setCustomLocation] = useState('');
   const [customPassword, setCustomPassword] = useState('');
+  const [customSpecific, setCustomSpecific] = useState('');
 
   const t = I18N_STRINGS[currentLang] || I18N_STRINGS.en;
 
@@ -134,35 +136,35 @@ export default function HomePage({ onLogin, currentLang, setCurrentLang }) {
     }
 
     const contactVal = signInContact.trim() || activeConfig.preset.phone;
-    const userAccount = {
-      ...activeConfig.preset,
-      phone: contactVal.includes('@') ? '+91 98000-00000' : contactVal,
-      email: contactVal.includes('@') ? contactVal : activeConfig.preset.email
-    };
+    const authResult = authenticateUser({
+      identifier: contactVal,
+      password: signInPassword,
+      role: selectedRole
+    });
 
-    confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
-    onLogin(userAccount);
+    if (authResult.success) {
+      confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
+      onLogin(authResult.user);
+    }
   };
 
   // Handle New User Registration
-  const handleRegisterSubmit = (e) => {
+  const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     const finalName = customName.trim() || activeConfig.preset.name;
-    const customUser = {
-      id: `usr-${selectedRole}-${Date.now()}`,
+    const registeredUser = await registerNewUser({
       name: finalName,
+      phone: customContact.includes('@') ? '+91 98000-00000' : (customContact || '+91 98XXX-XXXXX'),
+      email: customContact.includes('@') ? customContact : `${finalName.toLowerCase().replace(/[^a-z0-9]/g, '')}@krishisetu.in`,
       role: selectedRole,
       roleLabel: activeConfig.title,
-      email: customContact.includes('@') ? customContact : `${finalName.toLowerCase().replace(/\s+/g, '')}@krishisetu.in`,
-      phone: customContact.includes('@') ? '+91 98000-00000' : (customContact || '+91 98XXX-XXXXX'),
       location: customLocation || 'Maharashtra, India',
-      avatar: finalName.charAt(0).toUpperCase(),
-      badgeColor: activeConfig.color,
-      customDetail: customSpecific || activeConfig.fieldPlaceholder
-    };
+      customDetail: customSpecific || activeConfig.fieldPlaceholder,
+      password: customPassword
+    });
 
     confetti({ particleCount: 80, spread: 85, origin: { y: 0.6 } });
-    onLogin(customUser);
+    onLogin(registeredUser);
   };
 
   const cycleLang = () => {
@@ -666,7 +668,18 @@ export default function HomePage({ onLogin, currentLang, setCurrentLang }) {
                       />
                     </div>
 
-                    <div className="form-group" style={{ marginBottom: '16px' }}>
+                    <div className="form-group" style={{ marginBottom: '12px' }}>
+                      <label className="form-label">{activeConfig.fieldLabel}</label>
+                      <input
+                        type="text"
+                        className="form-input"
+                        placeholder={activeConfig.fieldPlaceholder}
+                        value={customSpecific}
+                        onChange={(e) => setCustomSpecific(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="form-group" style={{ marginBottom: '14px' }}>
                       <label className="form-label">Create Password / Security PIN</label>
                       <input
                         type="password"
@@ -676,6 +689,28 @@ export default function HomePage({ onLogin, currentLang, setCurrentLang }) {
                         onChange={(e) => setCustomPassword(e.target.value)}
                         required
                       />
+                    </div>
+
+                    {/* Instant SMS Alert Verification Badge */}
+                    <div style={{
+                      background: '#f8fafc',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '8px',
+                      padding: '10px 14px',
+                      marginBottom: '16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Smartphone size={16} color="#15803d" />
+                        <span style={{ fontSize: '11.5px', color: '#475569', fontWeight: '600' }}>
+                          Instant Telecom DLT SMS Confirmation
+                        </span>
+                      </div>
+                      <span style={{ fontSize: '10.5px', color: '#15803d', fontWeight: '800', background: '#dcfce7', padding: '2px 8px', borderRadius: '12px' }}>
+                        Active ✓
+                      </span>
                     </div>
 
                     <button

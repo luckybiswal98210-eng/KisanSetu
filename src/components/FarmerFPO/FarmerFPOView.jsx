@@ -483,7 +483,7 @@ export default function FarmerFPOView({
                         alignItems: 'center',
                         gap: '4px'
                       }}
-                      onClick={openSmsModal}
+                      onClick={() => openSmsModal({ name: farmer.name, phone: farmer.phone, crop: farmer.crop })}
                     >
                       <Smartphone size={12} />
                       <span>SMS Alert</span>

@@ -16,6 +16,7 @@ import EarningsSimulatorModal from './components/Modals/EarningsSimulatorModal';
 import SmsSimulatorModal from './components/Modals/SmsSimulatorModal';
 import AuthModal from './components/Auth/AuthModal';
 import KisanChatbot from './components/Common/KisanChatbot';
+import SmsToastNotification from './components/Common/SmsToastNotification';
 
 import { 
   PRESET_ACCOUNTS,
@@ -81,7 +82,15 @@ export default function App() {
   const [isPostDemandOpen, setIsPostDemandOpen] = useState(false);
   const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
   const [isSmsModalOpen, setIsSmsModalOpen] = useState(false);
+  const [smsTarget, setSmsTarget] = useState(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const handleOpenSmsModal = (target = null) => {
+    // Prevent React SyntheticEvent from being treated as recipient object
+    const validTarget = (target && !target.nativeEvent && !target.preventDefault && target.phone) ? target : null;
+    setSmsTarget(validTarget);
+    setIsSmsModalOpen(true);
+  };
 
   // Synchronize localStorage
   useEffect(() => {
@@ -177,6 +186,7 @@ export default function App() {
           setCurrentLang={setCurrentLang}
         />
         <KisanChatbot currentUser={null} currentLang={currentLang} />
+        <SmsToastNotification />
       </>
     );
   }
@@ -190,7 +200,7 @@ export default function App() {
         setActiveTab={setActiveTab}
         currentLang={currentLang}
         setCurrentLang={setCurrentLang}
-        openSmsModal={() => setIsSmsModalOpen(true)}
+        openSmsModal={handleOpenSmsModal}
         currentUser={currentUser}
         onSignOut={handleSignOut}
         onOpenAuth={() => setIsAuthModalOpen(true)}
@@ -218,7 +228,7 @@ export default function App() {
         {activeTab === 'farmer_direct' && (
           <FarmerDirectDashboard
             currentUser={currentUser}
-            openSmsModal={() => setIsSmsModalOpen(true)}
+            openSmsModal={handleOpenSmsModal}
             platformInquiries={platformInquiries}
             setPlatformInquiries={setPlatformInquiries}
           />
@@ -269,7 +279,7 @@ export default function App() {
 
         {activeTab === 'farmer_fpo' && (
           <FarmerFPOView
-            openSmsModal={() => setIsSmsModalOpen(true)}
+            openSmsModal={handleOpenSmsModal}
             platformInquiries={platformInquiries}
             setPlatformInquiries={setPlatformInquiries}
           />
@@ -300,9 +310,13 @@ export default function App() {
       <SmsSimulatorModal
         isOpen={isSmsModalOpen}
         onClose={() => setIsSmsModalOpen(false)}
+        smsTarget={smsTarget}
       />
 
-      {/* 4. Global Kisan Sahayak AI Text & Voice Chatbot Assistant */}
+      {/* 4. Global Floating SMS Delivery Notification Banner */}
+      <SmsToastNotification />
+
+      {/* 5. Global Kisan Sahayak AI Text & Voice Chatbot Assistant */}
       <KisanChatbot currentUser={currentUser} currentLang={currentLang} />
     </div>
   );
