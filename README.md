@@ -41,10 +41,34 @@ Traditional agricultural mandis (APMC) in India force smallholder farmers to end
 ## 🚀 Technology Stack
 
 - **Frontend**: React 18, Vite, Vanilla CSS Design System (Glassmorphism & dark-mode command aesthetic)
+- **Database & Cloud Backend**: Neon.tech Serverless PostgreSQL (`@neondatabase/serverless`)
 - **Icons & Visuals**: Lucide React, Canvas Confetti, Custom SVG Charting
 - **AI & Forecasting**: Neural price predictive models (7-day trend analysis, confidence bands, mandi glut warnings)
 - **Voice & Accessibility**: Simulated speech recording waveforms, Web Speech API integration, regional audio templates
-- **Infrastructure / Deployment**: Vercel ready (`npm run build`), zero runtime bloat
+- **Cloud Hosting**: Vercel & GitHub Pages compatible with SPA client routing
+
+---
+
+## ⚡ Cloud Deployment (Vercel + Neon.tech)
+
+KisanSetu is pre-configured for modern, serverless cloud deployment:
+
+### 1. Neon.tech Serverless PostgreSQL Setup
+1. Sign in to [Neon Console](https://console.neon.tech/) (free tier available).
+2. Create a new database project named `KisanSetu`.
+3. Open the **SQL Editor** tab in Neon and execute the schema and seed scripts:
+   - Run `src/db/schema.sql` to instantiate the 8 relational tables (`users`, `fpos`, `farmers`, `demands`, `consumer_requests`, `platform_inquiries`, `escrow_transactions`, `price_predictions`).
+   - Run `src/db/seed.sql` to populate initial demo data for all 5 stakeholder roles.
+4. Copy the **Connection Details** (Pooled or Direct connection string).
+
+### 2. Vercel 1-Click Deployment
+1. Go to [vercel.com/new](https://vercel.com/new) and log in with your GitHub account.
+2. Select your repository: **`luckybiswal98210-eng/KisanSetu`**.
+3. Under **Environment Variables**, add:
+   - **Key**: `VITE_NEON_DATABASE_URL`
+   - **Value**: `postgresql://neondb_owner:<password>@<endpoint>.neon.tech/neondb?sslmode=require`
+4. Click **Deploy**. Vercel will automatically build the Vite production bundle and serve the app on a high-speed Edge CDN with SPA URL rewriting enabled via `vercel.json`.
+
 
 ---
 
