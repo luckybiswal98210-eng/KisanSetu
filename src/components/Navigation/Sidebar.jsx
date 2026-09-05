@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   BarChart3, 
   Layers, 
@@ -12,9 +12,11 @@ import {
   ShieldCheck,
   ShieldAlert,
   ShoppingCart,
-  User
+  User,
+  Database
 } from 'lucide-react';
 import { I18N_STRINGS } from '../../data/mockData';
+import { checkNeonConnection } from '../../lib/neonClient';
 
 export default function Sidebar({ 
   activeTab, 
@@ -28,6 +30,27 @@ export default function Sidebar({
 }) {
   const t = I18N_STRINGS[currentLang] || I18N_STRINGS.en;
   const role = currentUser?.role || 'company';
+  const [dbStatus, setDbStatus] = useState({ connected: false, loading: true, dbName: '' });
+
+  useEffect(() => {
+    let isMounted = true;
+    checkNeonConnection()
+      .then((res) => {
+        if (isMounted) {
+          setDbStatus({ 
+            connected: !!res.connected, 
+            loading: false, 
+            dbName: res.database || 'neondb' 
+          });
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setDbStatus({ connected: false, loading: false, dbName: '' });
+        }
+      });
+    return () => { isMounted = false; };
+  }, []);
 
   // Dynamic Navigation Items based on 5 Roles
   const getNavItems = () => {
@@ -134,6 +157,34 @@ export default function Sidebar({
 
       {/* Sidebar Footer Controls */}
       <div className="sidebar-footer">
+        {/* Neon Cloud Database Status Pill */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '7px 10px',
+          marginBottom: '6px',
+          borderRadius: '8px',
+          fontSize: '11px',
+          fontWeight: '600',
+          background: dbStatus.connected ? 'rgba(0, 229, 153, 0.08)' : 'rgba(255, 255, 255, 0.04)',
+          border: dbStatus.connected ? '1px solid rgba(0, 229, 153, 0.3)' : '1px solid rgba(255, 255, 255, 0.08)',
+          color: dbStatus.connected ? '#6ee7b7' : '#94a3b8',
+          letterSpacing: '0.02em',
+          transition: 'all 0.3s ease'
+        }} title={dbStatus.connected ? `Connected to Neon Serverless PostgreSQL (${dbStatus.dbName})` : 'Neon Serverless Database: Ready'}>
+          <Database size={13} style={{ color: dbStatus.connected ? '#00e599' : '#64748b' }} />
+          <span>{dbStatus.connected ? 'Neon Cloud DB: Live' : 'Neon Serverless: Ready'}</span>
+          <span style={{
+            width: '6px',
+            height: '6px',
+            borderRadius: '50%',
+            marginLeft: 'auto',
+            background: dbStatus.connected ? '#00e599' : '#64748b',
+            boxShadow: dbStatus.connected ? '0 0 8px #00e599' : 'none'
+          }}></span>
+        </div>
+
         <button className="sidebar-footer-btn" onClick={openSmsModal} title="Dispatch automated SMS/WhatsApp alerts to rural farmers">
           <Smartphone size={16} />
           <span>SMS / IVR Dispatcher</span>
