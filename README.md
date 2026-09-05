@@ -2,10 +2,13 @@
 
 > **Smart India Hackathon (SIH) | Problem Statement: Eliminating 4–6 layers of middlemen between farmers, FPOs, enterprise bulk buyers, and retail consumers through demand-driven aggregation, 100% pre-funded escrow settlement, and AI-powered cold-chain logistics.**
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-success?style=for-the-badge&logo=githubpages&logoColor=white)](https://luckybiswal98210-eng.github.io/KisanSetu/)
 [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?logo=react&logoColor=black)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![UN SDGs](https://img.shields.io/badge/UN%20SDGs-1%2C%202%2C%208%2C%2012%2C%2013-E5243B)](https://sdgs.un.org/goals)
+
+🌐 **Live URL:** [https://luckybiswal98210-eng.github.io/KisanSetu/](https://luckybiswal98210-eng.github.io/KisanSetu/)
 
 ---
 
