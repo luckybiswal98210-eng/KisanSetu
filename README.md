@@ -3,12 +3,17 @@
 > **Smart India Hackathon (SIH) | Problem Statement: Eliminating 4–6 layers of middlemen between farmers, FPOs, enterprise bulk buyers, and retail consumers through demand-driven aggregation, 100% pre-funded escrow settlement, and AI-powered cold-chain logistics.**
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-success?style=for-the-badge&logo=githubpages&logoColor=white)](https://luckybiswal98210-eng.github.io/KisanSetu/)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fluckybiswal98210-eng%2FKisanSetu&env=VITE_NEON_DATABASE_URL&envDescription=Neon%20Serverless%20Postgres%20Connection%20String)
+[![Neon Database](https://img.shields.io/badge/Database-Neon%20Serverless%20Postgres-00E599?logo=postgresql&logoColor=white)](https://neon.tech)
 [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?logo=react&logoColor=black)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![UN SDGs](https://img.shields.io/badge/UN%20SDGs-1%2C%202%2C%208%2C%2012%2C%2013-E5243B)](https://sdgs.un.org/goals)
 
-🌐 **Live URL:** [https://luckybiswal98210-eng.github.io/KisanSetu/](https://luckybiswal98210-eng.github.io/KisanSetu/)
+🌐 **Live URL (GitHub Pages):** [https://luckybiswal98210-eng.github.io/KisanSetu/](https://luckybiswal98210-eng.github.io/KisanSetu/)  
+⚡ **Deploy to Vercel (1-Click):** [Deploy KisanSetu on Vercel](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fluckybiswal98210-eng%2FKisanSetu&env=VITE_NEON_DATABASE_URL&envDescription=Neon%20Serverless%20Postgres%20Connection%20String)  
+🐘 **Neon Cloud Database:** [https://console.neon.tech/](https://console.neon.tech/)
+
 
 ---
 
